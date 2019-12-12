@@ -14,7 +14,6 @@ class ClientTable extends React.Component {
     }
 
 renderCliente (cliente){
-  console.log(cliente)
   return (
         <tr key={cliente.id}>
           <td>{cliente.nome}</td>
