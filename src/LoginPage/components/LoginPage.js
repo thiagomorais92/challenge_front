@@ -1,14 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import LoginFormComponent from './LoginFormComponent';
-import {realizarLogin} from '../actions/loginPageActions';
+import {realizarLogin,verificaIsLogado} from '../actions/loginPageActions';
 import {Redirect} from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 
 
 class LoginPage extends React.Component {
     
-    
+    constructor(props){
+        super(props);
+        this.props.verificaIsLogado();
+    }
 
     submit = values =>{
         this.props.realizarLogin(values);
@@ -21,6 +24,7 @@ class LoginPage extends React.Component {
         if(this.props.isAuth){
            return <Redirect to='/client-page'/>
         }
+        
         return (<div>
             <ToastContainer />
             <LoginFormComponent onSubmit={this.submit} />
@@ -41,7 +45,8 @@ const mapStateToProps = (state) =>{
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        realizarLogin: (formValues) => dispatch(realizarLogin(formValues))
+        realizarLogin: (formValues) => dispatch(realizarLogin(formValues)),
+        verificaIsLogado: () => dispatch(verificaIsLogado())
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

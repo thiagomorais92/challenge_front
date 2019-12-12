@@ -51,7 +51,6 @@ export const  buscaVideo = (termo) =>{
                 dispatch(buscaVideoSucesso(data.items));
                 axios.get('https://viacep.com.br/ws/72025050/json/')
                 .then(function (response) {
-                    alert(JSON.stringify(response));
                     dispatch(cepEncontrado(response));
                 })
                 .catch(function (error) {

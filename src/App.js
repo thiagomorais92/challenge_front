@@ -5,22 +5,20 @@ import {Provider} from 'react-redux';
 import LoginPage from './LoginPage/components/LoginPage';
 import ClientePage from './ClientePage/components/ClientePage';
 import store from './store';
-import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min';
 import 'jquery/dist/jquery.min';
 import axios from 'axios';
 
-axios.interceptors.response.use((response) => {
-  
-  return response;
-},(error) => {
-  // You can even test for a response code 
-  // and try a new request before rejecting the promise
-   if (error.response.status === 401) {     
-     
-   }
-  return Promise.reject(error);
+axios.interceptors.request.use((config) => {
+  config.headers.common["Content-Type"] = 'application/json;charset=UTF-8';
+  config.headers.common["Access-Control-Allow-Origin"] = '*';
+  if(window.sessionStorage.getItem("token")){
+    config.headers.common["Authorization"] = window.sessionStorage.getItem("token"); 
+  }
+
+  return config;
 });
 
 
@@ -29,14 +27,12 @@ function App() {
     <div className="container">
       <Provider store={store}>
         <Router>
-          
-            <Route path="/">
+          <Route path="/">
               <LoginPage/>
             </Route>
             <Route path="/client-page">
               <ClientePage/>
             </Route>
-          
         </Router>
       </Provider>
     </div>
