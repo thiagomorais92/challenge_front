@@ -24,7 +24,10 @@ class LoginPage extends React.Component {
         return (<div>
             <ToastContainer />
             <LoginFormComponent onSubmit={this.submit} />
-                
+                <hr/>
+                <span>Por: Thiago Araújo de Morais</span><br/>
+                <a href="https://www.linkedin.com/in/devthiago/">LinkedIn</a><br/>
+                <a href="https://github.com/thiagomorais92">Github</a>
                 </div>)
     }
 }

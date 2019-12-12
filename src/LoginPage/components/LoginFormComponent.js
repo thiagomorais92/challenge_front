@@ -31,7 +31,7 @@ let LoginFormComponent = props => {
                     <div>
                         <Field
                             name="username"
-                            label="User Name"
+                            label="Nome de Usuário*"
                             type="text"
                             component={renderField} 
                             validate={[required]} />
@@ -39,7 +39,7 @@ let LoginFormComponent = props => {
                     <div>
                         <Field 
                         name="senha" 
-                        label="Senha" 
+                        label="Senha*" 
                         type="text"
                         component={renderField}
                         validate={[required]} />
