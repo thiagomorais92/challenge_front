@@ -1,24 +1,44 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
+import {Provider} from 'react-redux';
+import LoginPage from './LoginPage/components/LoginPage';
+import ClientePage from './ClientePage/components/ClientePage';
+import store from './store';
+import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min';
+import 'jquery/dist/jquery.min';
+import axios from 'axios';
+
+axios.interceptors.response.use((response) => {
+  
+  return response;
+},(error) => {
+  // You can even test for a response code 
+  // and try a new request before rejecting the promise
+   if (error.response.status === 401) {     
+     
+   }
+  return Promise.reject(error);
+});
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <Provider store={store}>
+        <Router>
+          
+            <Route path="/">
+              <LoginPage/>
+            </Route>
+            <Route path="/client-page">
+              <ClientePage/>
+            </Route>
+          
+        </Router>
+      </Provider>
     </div>
   );
 }
