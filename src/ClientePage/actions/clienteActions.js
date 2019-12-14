@@ -47,9 +47,22 @@ export const editarcliente = cliente =>{
 }
 function buscarClientesRest(dispatch) {
     axios.get('/api/cliente').then(resp => {
-        dispatch(clientesObtidos(resp.data.data));
+       const clientesDto = separarTelefonesAndEmails(resp.data.data);
+        dispatch(clientesObtidos(clientesDto));
     }).catch(err => {
         console.log(err);
     });
 }
 
+function separarTelefonesAndEmails(listaClientes){
+    listaClientes.forEach(cliente => {
+        cliente.emails = cliente.contatos.filter(contato=>{
+            return contato.tipoContato == "EMAIL";
+        });
+        cliente.telefones = cliente.contatos.filter(contato=>{
+            return contato.tipoContato == "TELEFONE";
+        });
+        cliente.contatos = undefined;
+    });
+    return listaClientes;
+}

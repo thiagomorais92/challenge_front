@@ -105,15 +105,35 @@ class ClienteModalForm extends React.Component {
                   />
                   </div>
                   <strong>Contato</strong><hr/>
+                  
                   <div>
-
                   {
                     this.props.cliente &&
-                    this.props.cliente.contatos.filter(contato =>{
-                      return contato.tipoContato == "EMAIL";
-                      
-                    }).map(cont=>{
-                    return (<p>{JSON.stringify(cont)}</p>)
+                    this.props.cliente.emails.map((cont,index)=>{
+                    return (
+                    <div key={index}>
+                      <Field
+                      name={"emails["+index+"].textoContato"}
+                      component="input"
+                      type="text"
+                      placeholder="Email"
+                    />
+                    </div>)
+                    })
+                  }
+
+{
+                    this.props.cliente &&
+                    this.props.cliente.telefones.map((cont2,index,array)=>{
+                    return (
+                    <div key={index}>
+                      <Field
+                      name={"telefones["+index+"].textoContato"}
+                      component="input"
+                      type="text"
+                      placeholder="Telefone"
+                    />
+                    </div>)
                     })
                   }
               </div>

@@ -31,7 +31,10 @@ renderCliente (cliente){
           </td>
           <td>{cliente.nome}</td>
           <td>{cliente.cpf}</td>
-          <td>{cliente.contatos[0].textoContato}</td>
+          <td>
+            {cliente.telefones.map(tel=>{return (tel.textoContato)})}<br/>
+            {cliente.emails.map(email=>{return (email.textoContato)})}
+          </td>
         </tr>
   )
 }
@@ -55,7 +58,7 @@ renderCliente (cliente){
             <th>Ação</th>
             <th scope="col">Nome</th>
             <th scope="col">Cpf</th>
-            <th scope="col">Contato</th>
+            <th scope="col">Contatos</th>
           </tr>
         </thead>
         <tbody>
