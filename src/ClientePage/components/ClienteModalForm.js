@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { toggleModal,buscarEnderecoPorCep} from '../actions/clienteActions'
-import { reduxForm, Field,formValueSelector } from 'redux-form';
+import { reduxForm, Field} from 'redux-form';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { required, minLength3, maxLength100,alphaNumeric,email} from '../../utils/formValidation'
 import {mascaraCep,mascaraCpf,mascaraTelefone} from '../../utils/mascarasUtils'
@@ -182,16 +182,14 @@ ClienteModalForm = reduxForm({
   form: 'clienteForm'
 })(ClienteModalForm)
 
-const selector = formValueSelector('clienteForm');
 
 const mapStateToProps = (state) => {
-  const cep = selector(state, 'cep');
+
   return {
     clientes: state.clienteState.clientes,
     modalOpen: state.clienteState.modalCLienteIsOpen,
     initialValues :state.clienteState.cliente,
     cliente: state.clienteState.cliente,
-    cep
   }
 }
 

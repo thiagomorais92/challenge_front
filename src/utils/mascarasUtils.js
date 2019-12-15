@@ -10,5 +10,5 @@ import { createNumberMask, createTextMask } from 'redux-form-input-masks';
   });
 
   export const mascaraCep = createTextMask({
-    pattern: '99.999-999',
+    pattern: '99999-999',
   });

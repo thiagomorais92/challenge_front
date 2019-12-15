@@ -2,12 +2,18 @@ import axios from 'axios';
 import { CLIENTE_CONSTANTES } from './clienteConstants';
 import { toast } from 'react-toastify';
 import {reset} from 'redux-form'
+import parseJson from 'parse-json';
 
 export const buscarEnderecoPorCep = cep =>{
     return dispatch => {
         cep = cep.replace(".","").replace("-","");
-        axios.get(`https://viacep.com.br/ws/${cep}/json/`).then(resp =>{
-            console.log(resp);
+        axios.get(`api/cep/${cep}`).then(resp =>{
+            const endereco = parseJson(resp.data.data)
+            if(!endereco.erro){
+                endereco.cep = endereco.cep.replace("-","");
+                dispatch({type:CLIENTE_CONSTANTES.ENDERECO_POR_CEP_DIGITADO,payload:endereco});
+            }
+                
         });
     }
 }
@@ -48,6 +54,7 @@ export const adicionarCLiente = () => {
     
     return dispatch => {
         var cliente = {
+            endereco:{},
             emails:[{tipoContato:"EMAIL",textoContato:""}],
             telefones:[{tipoContato:"TELEFONE",textoContato:""}]};
         dispatch({ type: CLIENTE_CONSTANTES.ADD_CLIENTE ,payload:{cliente,modalCLienteIsOpen:true}});

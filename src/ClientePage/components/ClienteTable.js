@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusSquare,faEdit } from '@fortawesome/free-solid-svg-icons'
 import ClienteModalForm from './ClienteModalForm';
 
-
 class ClientTable extends React.Component {
 
     constructor(props){
@@ -44,7 +43,7 @@ renderCliente (cliente){
         return (
         <div>
           <ClienteModalForm  />
-          <button className="btn btn-success" title="Novo Cliente" onClick={(e) =>this.props.adicionarCLiente()}>
+          <button className="btn btn-success" title="Novo Cliente" onClick={(e) => this.props.adicionarCLiente()}>
           <FontAwesomeIcon
               icon={faPlusSquare}
               size="4x"
