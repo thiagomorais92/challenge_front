@@ -8,10 +8,12 @@ switch(action.type){
         return {...state};
     case CLIENTE_CONSTANTES.CLIENTES_OBTIDOS:
         return Object.assign(state,action.payload)
-    case CLIENTE_CONSTANTES.TOGGLE_MODAL:
-        return {...state,...{modalCLienteIsOpen : !state.modalCLienteIsOpen }};
+    case CLIENTE_CONSTANTES.ADD_CLIENTE:
+        return {...state,...action.payload};
     case CLIENTE_CONSTANTES.EDITAR_CLIENTE:
         return {...state,...action.payload};
+    case CLIENTE_CONSTANTES.TOGGLE_MODAL:
+        return {...state,...{modalCLienteIsOpen:!state.modalCLienteIsOpen}}
     default: return {...state};
 }
 }

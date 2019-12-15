@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { required} from '../../utils/formValidation'
+import { required, minLength, maxLength} from '../../utils/formValidation'
 
 const renderField = ({
     input,
@@ -12,8 +12,8 @@ const renderField = ({
             <div>
                 <input {...input} className="fadeIn second" placeholder={label} type={type} />
                 {touched &&
-                    ((error && <div><span>{error}</span></div>) ||
-                        (warning && <div><span>{warning}</span></div>))}
+          ((error && <div><span style={{color: "red"}}>{error}</span></div>) ||
+            (warning && <div ><span style={{color: "yellow"}}>{warning}</span></div>))}
             </div>
         </div>
     )
@@ -34,7 +34,7 @@ let LoginFormComponent = props => {
                             label="Nome de Usuário*"
                             type="text"
                             component={renderField} 
-                            validate={[required]} />
+                            validate={[required,minLength(3),maxLength(100)]} />
                     </div>
                     <div>
                         <Field 

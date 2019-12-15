@@ -1,11 +1,11 @@
 export const required = value => (value || typeof value === 'number' ? undefined : 'Campo Obrigatório')
 export const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined
-export const maxLength15 = maxLength(15)
+  value && value.length > max ? `Maximo de ${max} caracteres permitidos` : undefined
+export const maxLength100 = maxLength(100)
 
  export const minLength = min => value =>
-  value && value.length < min ? `Must be ${min} characters or more` : undefined
- export const minLength2 = minLength(2)
+  value && value.length < min ? `Minimo de ${min} caracteres permitidos` : undefined
+ export const minLength3 = minLength(3)
 export const number = value =>
   value && isNaN(Number(value)) ? 'Tem que ser número' : undefined
 export const minValue = min => value =>

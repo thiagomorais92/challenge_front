@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {buscarClientes,removeClient,toggleModal,editarcliente} from '../actions/clienteActions'
+import {buscarClientes,removeClient,adicionarCLiente,editarcliente,toggleModal} from '../actions/clienteActions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusSquare,faEdit } from '@fortawesome/free-solid-svg-icons'
 import ClienteModalForm from './ClienteModalForm';
@@ -44,7 +44,7 @@ renderCliente (cliente){
         return (
         <div>
           <ClienteModalForm  />
-          <button className="btn btn-success" title="Novo Cliente" onClick={(e) =>this.props.toggleModal()}>
+          <button className="btn btn-success" title="Novo Cliente" onClick={(e) =>this.props.adicionarCLiente()}>
           <FontAwesomeIcon
               icon={faPlusSquare}
               size="4x"
@@ -86,10 +86,11 @@ const mapStateToProps = (state) =>{
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        buscarClientes: () => dispatch(buscarClientes()),
-        removeClient:   (cliente) => dispatch(removeClient(cliente)),
-        toggleModal:    () => dispatch(toggleModal()),
-        editarcliente:  (cliente) => dispatch(editarcliente(cliente))
+        buscarClientes:      ()        => dispatch(buscarClientes()),
+        removeClient:        (cliente) => dispatch(removeClient(cliente)),
+        adicionarCLiente:    ()        => dispatch(adicionarCLiente()),
+        editarcliente:       (cliente) => dispatch(editarcliente(cliente)),
+        toggleModal:         ()        => dispatch(toggleModal())    
     }
 }
 

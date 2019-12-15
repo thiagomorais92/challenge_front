@@ -1,6 +1,16 @@
 import axios from 'axios';
 import { CLIENTE_CONSTANTES } from './clienteConstants';
 import { toast } from 'react-toastify';
+import {reset} from 'redux-form'
+
+export const buscarEnderecoPorCep = cep =>{
+    return dispatch => {
+        cep = cep.replace(".","").replace("-","");
+        axios.get(`https://viacep.com.br/ws/${cep}/json/`).then(resp =>{
+            console.log(resp);
+        });
+    }
+}
 
 export const removeClient = cliente => {
     return dispatch => {
@@ -34,9 +44,23 @@ export const buscarClientes = () => {
     }
 }
 
-export const toggleModal = () => {
+export const adicionarCLiente = () => {
+    
     return dispatch => {
-        dispatch({ type: CLIENTE_CONSTANTES.TOGGLE_MODAL });
+        var cliente = {
+            emails:[{tipoContato:"EMAIL",textoContato:""}],
+            telefones:[{tipoContato:"TELEFONE",textoContato:""}]};
+        dispatch({ type: CLIENTE_CONSTANTES.ADD_CLIENTE ,payload:{cliente,modalCLienteIsOpen:true}});
+    }
+}
+
+export const toggleModal = () =>{
+    return dispatch => {
+        dispatch(reset("clienteForm"));
+        var cliente = {
+            emails:[{tipoContato:"EMAIL",textoContato:""}],
+            telefones:[{tipoContato:"TELEFONE",textoContato:""}]};
+        dispatch({ type: CLIENTE_CONSTANTES.ADD_CLIENTE ,payload:{cliente,modalCLienteIsOpen:false}});
     }
 }
 
@@ -57,10 +81,10 @@ function buscarClientesRest(dispatch) {
 function separarTelefonesAndEmails(listaClientes){
     listaClientes.forEach(cliente => {
         cliente.emails = cliente.contatos.filter(contato=>{
-            return contato.tipoContato == "EMAIL";
+            return contato.tipoContato === "EMAIL";
         });
         cliente.telefones = cliente.contatos.filter(contato=>{
-            return contato.tipoContato == "TELEFONE";
+            return contato.tipoContato === "TELEFONE";
         });
         cliente.contatos = undefined;
     });

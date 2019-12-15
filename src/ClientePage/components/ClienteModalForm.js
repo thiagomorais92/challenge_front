@@ -1,27 +1,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { toggleModal } from '../actions/clienteActions'
-import { reduxForm, Field } from 'redux-form';
+import { toggleModal,buscarEnderecoPorCep} from '../actions/clienteActions'
+import { reduxForm, Field,formValueSelector } from 'redux-form';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { required } from '../../utils/formValidation'
+import { required, minLength3, maxLength100,alphaNumeric,email} from '../../utils/formValidation'
+import {mascaraCep,mascaraCpf,mascaraTelefone} from '../../utils/mascarasUtils'
 
 const renderField = ({
   input,
   label,
   type,
+  placeholder,
   meta: { touched, error, warning }
 }) => (
     <div>
       <div>
-        <input {...input} className="fadeIn second" placeholder={label} type={type} />
+        <input {...input} placeholder={placeholder} type={type} />
         {touched &&
-          ((error && <div><span>{error}</span></div>) ||
-            (warning && <div><span>{warning}</span></div>))}
+          ((error && <div><span style={{color: "red"}}>{error}</span></div>) ||
+            (warning && <div ><span style={{color: "yellow"}}>{warning}</span></div>))}
       </div>
     </div>
   )
 
-
+ 
 
 class ClienteModalForm extends React.Component {
 
@@ -29,8 +31,12 @@ class ClienteModalForm extends React.Component {
     super(props)
   }
 
+  limparFormAndFecharModal(){
+    
+  }
+
   render() {
-    const { handleSubmit, submitting } = this.props
+    const { handleSubmit, submitting ,cepSemMask,buscarEnderecoPorCep} = this.props
     return (
       <div>
 
@@ -40,66 +46,84 @@ class ClienteModalForm extends React.Component {
             <form onSubmit={handleSubmit}>
             <strong>Identificação</strong><hr/>
               <div>
+                <label>Nome:</label>
                 <Field
                     name="nome"
-                    component="input"
+                    component={renderField}
                     type="text"
                     placeholder="Nome completo"
+                    validate={[required,minLength3,maxLength100,alphaNumeric]}
                   />
               </div>
               <div>
+              <label>CPF:</label>
                 <Field
                     name="cpf"
-                    component="input"
+                    component={renderField}
                     type="text"
                     placeholder="CPF"
+                    validate={[required]}
+                    {...mascaraCpf}
                   />
               </div>
               <strong>Endereço</strong><hr/>
               <div>
+              <label>CEP:</label>
                 <Field
                     name="endereco.cep"
-                    component="input"
+                    component={renderField}
                     type="text"
                     placeholder="CEP"
+                    validate={[required]}
+                    {...mascaraCep}
+                    onBlur={(e)=>{buscarEnderecoPorCep(e.currentTarget.defaultValue)}}
                   />
               </div>
               <div>
+              <label>Logradouro:</label>
                 <Field
                     name="endereco.logradouro"
-                    component="input"
+                    component={renderField}
                     type="text"
                     placeholder="Logradouro"
+                    validate={[required]}
                   />
               </div>
               <div>
+              <label>Bairro:</label>
                 <Field
                     name="endereco.bairro"
-                    component="input"
+                    component={renderField}
                     type="text"
                     placeholder="Bairro"
+                    validate={[required]}
                   />
               </div>
               <div>
+              <label>Cidade:</label>
                 <Field
                     name="endereco.cidade"
-                    component="input"
+                    component={renderField}
                     type="text"
                     placeholder="Cidade"
+                    validate={[required]}
                   />
               </div>
               <div>
+              <label>UF:</label>
                 <Field
                     name="endereco.uf"
-                    component="input"
+                    component={renderField}
                     type="text"
                     placeholder="UF"
+                    validate={[required]}
                   />
                   </div>
                   <div>
+                  <label>Complemento:</label>
                 <Field
                     name="endereco.complemento"
-                    component="input"
+                    component={renderField}
                     type="text"
                     placeholder="Complemento"
                   />
@@ -112,11 +136,13 @@ class ClienteModalForm extends React.Component {
                     this.props.cliente.emails.map((cont,index)=>{
                     return (
                     <div key={index}>
+                      <label>Email:</label>
                       <Field
                       name={"emails["+index+"].textoContato"}
-                      component="input"
+                      component={renderField}
                       type="text"
                       placeholder="Email"
+                      validate={email}
                     />
                     </div>)
                     })
@@ -127,11 +153,13 @@ class ClienteModalForm extends React.Component {
                     this.props.cliente.telefones.map((cont2,index,array)=>{
                     return (
                     <div key={index}>
+                      <label>Telefone:</label>
                       <Field
                       name={"telefones["+index+"].textoContato"}
-                      component="input"
+                      component={renderField}
                       type="text"
                       placeholder="Telefone"
+                      {...mascaraTelefone}
                     />
                     </div>)
                     })
@@ -149,23 +177,30 @@ class ClienteModalForm extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    clientes: state.clienteState.clientes,
-    modalOpen: state.clienteState.modalCLienteIsOpen,
-    initialValues :state.clienteState.cliente,
-    cliente: state.clienteState.cliente
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleModal: () => dispatch(toggleModal())
-  }
-}
 
 ClienteModalForm = reduxForm({
   form: 'clienteForm'
 })(ClienteModalForm)
+
+const selector = formValueSelector('clienteForm');
+
+const mapStateToProps = (state) => {
+  const cep = selector(state, 'cep');
+  return {
+    clientes: state.clienteState.clientes,
+    modalOpen: state.clienteState.modalCLienteIsOpen,
+    initialValues :state.clienteState.cliente,
+    cliente: state.clienteState.cliente,
+    cep
+  }
+}
+
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleModal: () => dispatch(toggleModal()),
+    buscarEnderecoPorCep: (cep) => dispatch(buscarEnderecoPorCep(cep))
+  }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClienteModalForm);
