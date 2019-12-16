@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {buscarClientes,removeClient,adicionarCLiente,editarcliente,toggleModal} from '../actions/clienteActions'
+import {buscarClientes,removeClient,adicionarCLiente,editarcliente,toggleModal,salvarCliente} from '../actions/clienteActions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusSquare,faEdit } from '@fortawesome/free-solid-svg-icons'
 import ClienteModalForm from './ClienteModalForm';
@@ -17,7 +17,9 @@ class ClientTable extends React.Component {
       this.props.removeClient(cliente);
     }
 
-    
+    saveClient = formValues =>{
+      this.props.salvarCliente(formValues);
+    }
 
 renderCliente (cliente){
   return (
@@ -31,8 +33,8 @@ renderCliente (cliente){
           <td>{cliente.nome}</td>
           <td>{cliente.cpf}</td>
           <td>
-            {cliente.telefones.map(tel=>{return (tel.textoContato)})}<br/>
-            {cliente.emails.map(email=>{return (email.textoContato)})}
+            {cliente.emailPrincipal}<br/>
+            
           </td>
         </tr>
   )
@@ -42,7 +44,7 @@ renderCliente (cliente){
       if(this.props.clientes){
         return (
         <div>
-          <ClienteModalForm  />
+          <ClienteModalForm onSubmit={this.saveClient} />
           <button className="btn btn-success" title="Novo Cliente" onClick={(e) => this.props.adicionarCLiente()}>
           <FontAwesomeIcon
               icon={faPlusSquare}
@@ -89,7 +91,8 @@ const mapDispatchToProps = (dispatch) => {
         removeClient:        (cliente) => dispatch(removeClient(cliente)),
         adicionarCLiente:    ()        => dispatch(adicionarCLiente()),
         editarcliente:       (cliente) => dispatch(editarcliente(cliente)),
-        toggleModal:         ()        => dispatch(toggleModal())    
+        toggleModal:         ()        => dispatch(toggleModal()),
+        salvarCliente: formValues => dispatch(salvarCliente(formValues))  
     }
 }
 

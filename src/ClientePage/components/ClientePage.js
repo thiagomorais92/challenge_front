@@ -5,9 +5,6 @@ import { ToastContainer } from 'react-toastify';
 import {Redirect} from 'react-router-dom';
 
 class ClientePage extends React.Component {
-    
-
-    
 
     submit = values =>{
         this.props.realizarLogin(values);
@@ -32,5 +29,6 @@ const mapStateToProps = (state) =>{
         isAuth: state.loginPageReducer.isAuth,
     }
 }
+
 
 export default connect(mapStateToProps, null)(ClientePage);

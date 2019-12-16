@@ -45,7 +45,7 @@ let LoginFormComponent = props => {
                         validate={[required]} />
                     </div>
 
-                    <input type="submit" disabled={submitting} className="fadeIn fourth" value="Log In"></input>
+                    <input type="submit" disabled={submitting} className="fadeIn fourth" value="Entrar"></input>
                 </form>
 
             </div>

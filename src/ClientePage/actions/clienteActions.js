@@ -4,18 +4,61 @@ import { toast } from 'react-toastify';
 import {reset} from 'redux-form'
 import parseJson from 'parse-json';
 
-export const buscarEnderecoPorCep = cep =>{
-    return dispatch => {
-        cep = cep.replace(".","").replace("-","");
-        axios.get(`api/cep/${cep}`).then(resp =>{
-            const endereco = parseJson(resp.data.data)
-            if(!endereco.erro){
-                endereco.cep = endereco.cep.replace("-","");
-                dispatch({type:CLIENTE_CONSTANTES.ENDERECO_POR_CEP_DIGITADO,payload:endereco});
-            }
-                
-        });
+const makePostClient = (dispatch,cliente)=>{
+    axios.post("/api/cliente",cliente).then(resp=>{
+        dispatch({type:CLIENTE_CONSTANTES.CLIENTE_SALVO})
+        dispatch({type:CLIENTE_CONSTANTES.TOGGLE_MODAL})
+        buscarClientesRest(dispatch);
+
+});
+}
+
+const makePutClient = (dispatch,cliente)=>{
+    axios.put("/api/cliente",cliente).then(resp=>{
+        dispatch({type:CLIENTE_CONSTANTES.CLIENTE_ATUALIZADO})
+        dispatch({type:CLIENTE_CONSTANTES.TOGGLE_MODAL})
+        buscarClientesRest(dispatch);
+    })
+}
+
+export const salvarCliente = formValues =>{
+    return dispatch =>{
+        if(formValues.id){
+            makePutClient(dispatch,formValues);
+        }
+        else{
+            makePostClient(dispatch,formValues);
+        }
     }
+}
+
+export const buscarEnderecoPorCep = cep =>{
+    if(cep.indexOf("_") == -1){
+
+        return dispatch => {
+            cep = cep.replace("-","");
+            axios.get(`api/cep/${cep}`).then(resp =>{
+                if(resp.data.data.indexOf("erro") == -1){
+                const endereco = parseJson(resp.data.data);
+                const enderecoCerto = {
+                    cidade : endereco.localidade,
+                    cep  : endereco.cep.replace("-",""),
+                    logradouro : endereco.logradouro,
+                    complemento : endereco.complemento,
+                    bairro:endereco.bairro,
+                    uf:endereco.uf
+                }
+                
+                    endereco.cep = endereco.cep.replace("-","");
+                    dispatch({type:CLIENTE_CONSTANTES.ENDERECO_POR_CEP_DIGITADO,payload:enderecoCerto});
+                }
+                    
+            });
+        }
+    }else{
+        return dispatch => dispatch({type:'default'});
+    }
+    
 }
 
 export const removeClient = cliente => {
@@ -53,10 +96,7 @@ export const buscarClientes = () => {
 export const adicionarCLiente = () => {
     
     return dispatch => {
-        var cliente = {
-            endereco:{},
-            emails:[{tipoContato:"EMAIL",textoContato:""}],
-            telefones:[{tipoContato:"TELEFONE",textoContato:""}]};
+        var cliente = {};
         dispatch({ type: CLIENTE_CONSTANTES.ADD_CLIENTE ,payload:{cliente,modalCLienteIsOpen:true}});
     }
 }
@@ -64,9 +104,7 @@ export const adicionarCLiente = () => {
 export const toggleModal = () =>{
     return dispatch => {
         dispatch(reset("clienteForm"));
-        var cliente = {
-            emails:[{tipoContato:"EMAIL",textoContato:""}],
-            telefones:[{tipoContato:"TELEFONE",textoContato:""}]};
+        var cliente = {};
         dispatch({ type: CLIENTE_CONSTANTES.ADD_CLIENTE ,payload:{cliente,modalCLienteIsOpen:false}});
     }
 }
@@ -78,22 +116,8 @@ export const editarcliente = cliente =>{
 }
 function buscarClientesRest(dispatch) {
     axios.get('/api/cliente').then(resp => {
-       const clientesDto = separarTelefonesAndEmails(resp.data.data);
-        dispatch(clientesObtidos(clientesDto));
+       dispatch(clientesObtidos(resp.data.data));
     }).catch(err => {
         console.log(err);
     });
-}
-
-function separarTelefonesAndEmails(listaClientes){
-    listaClientes.forEach(cliente => {
-        cliente.emails = cliente.contatos.filter(contato=>{
-            return contato.tipoContato === "EMAIL";
-        });
-        cliente.telefones = cliente.contatos.filter(contato=>{
-            return contato.tipoContato === "TELEFONE";
-        });
-        cliente.contatos = undefined;
-    });
-    return listaClientes;
 }

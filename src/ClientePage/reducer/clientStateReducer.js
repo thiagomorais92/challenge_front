@@ -15,8 +15,8 @@ switch(action.type){
     case CLIENTE_CONSTANTES.TOGGLE_MODAL:
         return {...state,...{modalCLienteIsOpen:!state.modalCLienteIsOpen}}
     case CLIENTE_CONSTANTES.ENDERECO_POR_CEP_DIGITADO:
-        const novoEndereco = Object.assign(state.cliente.endereco,action.payload);
-        state.cliente.endereco = novoEndereco;
+        const novoEndereco = Object.assign(state.cliente,action.payload);
+        state.cliente = novoEndereco;
         return {...state};
     default: return {...state};
 }

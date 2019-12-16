@@ -1,4 +1,4 @@
-import { createNumberMask, createTextMask } from 'redux-form-input-masks';
+import {  createTextMask } from 'redux-form-input-masks';
  
  
  export const mascaraTelefone = createTextMask({
