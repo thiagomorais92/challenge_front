@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { toggleModal,buscarEnderecoPorCep} from '../actions/clienteActions'
 import { reduxForm, Field} from 'redux-form';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { required, minLength3, maxLength100,email} from '../../utils/formValidation'
+import { required, minLength3, maxLength100,email,validarCPF} from '../../utils/formValidation'
 import {mascaraCep,mascaraCpf,mascaraTelefone,mascaraUF} from '../../utils/mascarasUtils'
 
 const renderField = ({
@@ -56,7 +56,7 @@ class ClienteModalForm extends React.Component {
                     component={renderField}
                     type="text"
                     placeholder="CPF"
-                    validate={[required]}
+                    validate={[required,validarCPF]}
                     {...mascaraCpf}
                   />
               </div>
