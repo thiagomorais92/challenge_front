@@ -24,7 +24,7 @@ let LoginFormComponent = props => {
         <div className="wrapper fadeInDown">
             <div id="formContent">
                 <div id="formFooter">
-                    <a className="underlineHover" href="#">Mirante/Cooperforte</a>
+                    <span className="underlineHover" >Mirante/Cooperforte</span>
                 </div>
 
                 <form onSubmit={handleSubmit}>

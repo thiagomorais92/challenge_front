@@ -12,3 +12,7 @@ import {  createTextMask } from 'redux-form-input-masks';
   export const mascaraCep = createTextMask({
     pattern: '99999-999',
   });
+
+  export const mascaraUF = createTextMask({
+    pattern:'AA'
+  })

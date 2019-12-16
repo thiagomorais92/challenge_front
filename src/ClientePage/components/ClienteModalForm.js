@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { toggleModal,buscarEnderecoPorCep} from '../actions/clienteActions'
 import { reduxForm, Field} from 'redux-form';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { required, minLength3, maxLength100,alphaNumeric,email} from '../../utils/formValidation'
-import {mascaraCep,mascaraCpf,mascaraTelefone} from '../../utils/mascarasUtils'
+import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { required, minLength3, maxLength100,email} from '../../utils/formValidation'
+import {mascaraCep,mascaraCpf,mascaraTelefone,mascaraUF} from '../../utils/mascarasUtils'
 
 const renderField = ({
   input,
@@ -27,12 +27,10 @@ const renderField = ({
 
 class ClienteModalForm extends React.Component {
 
-  salvar(values){
-    console.log(values);
-  }
+
 
   render() {
-    const { handleSubmit, submitting ,buscarEnderecoPorCep} = this.props
+    const { handleSubmit ,buscarEnderecoPorCep} = this.props
     return (
       <div>
 
@@ -113,6 +111,7 @@ class ClienteModalForm extends React.Component {
                     type="text"
                     placeholder="UF"
                     validate={[required]}
+                    {...mascaraUF}
                   />
                   </div>
                   <div>
@@ -128,7 +127,7 @@ class ClienteModalForm extends React.Component {
                   
                   <div>
                   <div >
-                      <label>Email Principal*:</label>
+                      <label>Email Principal *:</label>
                       <Field
                       name={"emailPrincipal"}
                       component={renderField}
@@ -193,7 +192,7 @@ class ClienteModalForm extends React.Component {
 
               </div>
               <Button  type="submit" color="primary" >Salvar</Button>
-            <Button color="secondary" onClick={(e) => this.props.toggleModal()}>Cancel</Button>
+            <Button color="secondary" style={{"float":"right"}} onClick={(e) => this.props.toggleModal()}>Cancel</Button>
             </form>
           </ModalBody>
         </Modal>
@@ -205,8 +204,7 @@ class ClienteModalForm extends React.Component {
 
 ClienteModalForm = reduxForm({
   form: 'clienteForm',
-  destroyOnUnmount:true,
-  enableReinitialize:true
+  enableReinitialize:true,
 })(ClienteModalForm)
 
 
@@ -215,7 +213,8 @@ const mapStateToProps = (state) => {
   return {
     clientes: state.clienteState.clientes,
     modalOpen: state.clienteState.modalCLienteIsOpen,
-    initialValues :state.clienteState.cliente
+    initialValues :state.clienteState.cliente,
+    cliente: state.clienteState.cliente
 
   }
 }

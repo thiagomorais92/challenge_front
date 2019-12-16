@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {buscarClientes,removeClient,adicionarCLiente,editarcliente,toggleModal,salvarCliente} from '../actions/clienteActions'
+import {buscarClientes,removeClient,adicionarCLiente,editarcliente,toggleModal,salvarCliente,logOut} from '../actions/clienteActions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlusSquare,faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faPlusSquare,faEdit,faTrash,faSignInAlt} from '@fortawesome/free-solid-svg-icons'
 import ClienteModalForm from './ClienteModalForm';
 
 class ClientTable extends React.Component {
@@ -25,15 +25,20 @@ renderCliente (cliente){
   return (
         <tr key={cliente.id}>
           <td><button title="Editar Cliente" onClick={(e) =>this.props.editarcliente(cliente)}>
-          <FontAwesomeIcon icon={faEdit} size="2x" style={{ '--fa-primary-color': 'green' ,margin:"2px"}}
+          <FontAwesomeIcon icon={faEdit} size="1x" style={{ '--fa-primary-color': 'green' ,margin:"2px"}}
             />
           </button>
-          <button type="button" onClick={(e)=>{this.deleteCliente(cliente)}} className="btn btn-danger">Delete</button>
+          <button title="Deletar Cliente" onClick={(e) =>this.deleteCliente(cliente)}>
+          <FontAwesomeIcon icon={faTrash} size="1x" style={{ '--fa-primary-color': 'green' ,margin:"2px"}}
+            />
+          </button>
+          
           </td>
           <td>{cliente.nome}</td>
-          <td>{cliente.cpf}</td>
+          <td>{cliente.cpfToShow}</td>
           <td>
             {cliente.emailPrincipal}<br/>
+            {cliente.celularToShow}
             
           </td>
         </tr>
@@ -48,11 +53,14 @@ renderCliente (cliente){
           <button className="btn btn-success" title="Novo Cliente" onClick={(e) => this.props.adicionarCLiente()}>
           <FontAwesomeIcon
               icon={faPlusSquare}
-              size="4x"
+              size="2x"
               style={{ '--fa-primary-color': 'green' ,"float":"left"}}
             />
           </button>
-          
+          <button style={{"float":"right"}} title="Sair da aplicação" onClick={(e) =>this.props.logOut()}>
+          <FontAwesomeIcon icon={faSignInAlt} size="2x" style={{ '--fa-primary-color': 'green' ,margin:"2px"}}
+            />
+          </button>
         <table className="table">
         <thead>
           <tr>
@@ -87,12 +95,13 @@ const mapStateToProps = (state) =>{
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        buscarClientes:      ()        => dispatch(buscarClientes()),
-        removeClient:        (cliente) => dispatch(removeClient(cliente)),
-        adicionarCLiente:    ()        => dispatch(adicionarCLiente()),
-        editarcliente:       (cliente) => dispatch(editarcliente(cliente)),
-        toggleModal:         ()        => dispatch(toggleModal()),
-        salvarCliente: formValues => dispatch(salvarCliente(formValues))  
+        buscarClientes:      ()           => dispatch(buscarClientes()),
+        removeClient:        (cliente)    => dispatch(removeClient(cliente)),
+        adicionarCLiente:    ()           => dispatch(adicionarCLiente()),
+        editarcliente:       (cliente)    => dispatch(editarcliente(cliente)),
+        toggleModal:         ()           => dispatch(toggleModal()),
+        salvarCliente:       (formValues) => dispatch(salvarCliente(formValues)),
+        logOut:              ()           => dispatch(logOut())
     }
 }
 

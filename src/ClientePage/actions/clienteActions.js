@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { CLIENTE_CONSTANTES } from './clienteConstants';
 import { toast } from 'react-toastify';
-import {reset} from 'redux-form'
+import {reset,change} from 'redux-form'
 import parseJson from 'parse-json';
+
+
 
 const makePostClient = (dispatch,cliente)=>{
     axios.post("/api/cliente",cliente).then(resp=>{
@@ -50,6 +52,10 @@ export const buscarEnderecoPorCep = cep =>{
                 }
                 
                     endereco.cep = endereco.cep.replace("-","");
+                    dispatch(change("clienteForm","logradouro",enderecoCerto.logradouro));
+                    dispatch(change("clienteForm","bairro",enderecoCerto.bairro));
+                    dispatch(change("clienteForm","uf",enderecoCerto.uf));
+                    dispatch(change("clienteForm","cidade",enderecoCerto.cidade));
                     dispatch({type:CLIENTE_CONSTANTES.ENDERECO_POR_CEP_DIGITADO,payload:enderecoCerto});
                 }
                     
@@ -114,10 +120,43 @@ export const editarcliente = cliente =>{
         dispatch({type:CLIENTE_CONSTANTES.EDITAR_CLIENTE,payload:{cliente,modalCLienteIsOpen:true}});
     }
 }
+
+
+const mascararLabels = listaClientes=>{
+    listaClientes.forEach(cli =>{
+        cpfMaskLabel(cli);
+        telMaskLavel(cli);
+    });
+}
+
+const telMaskLavel = cli =>{
+    var pt1 =  "("+cli.telefoneCelular.substring(0,2)+") "
+    
+    cli.celularToShow = pt1 + cli.telefoneCelular.substring(2,cli.telefoneCelular.length);
+}
+
+const cpfMaskLabel = cli =>{
+    var pt1 = cli.cpf.substring(0,3)+'.';
+    var pt2 = cli.cpf.substring(3,6)+'.';
+    var pt3 = cli.cpf.substring(6,9)+'-'
+    var pt4 = cli.cpf.substring((cli.cpf.length-2),cli.cpf.length);
+    cli.cpfToShow = pt1+pt2+pt3+pt4;
+}
+
 function buscarClientesRest(dispatch) {
     axios.get('/api/cliente').then(resp => {
+       mascararLabels(resp.data.data)
        dispatch(clientesObtidos(resp.data.data));
     }).catch(err => {
         console.log(err);
     });
+}
+
+
+export const logOut = () =>{
+    return dispatch =>{
+        window.sessionStorage.removeItem("token");
+        dispatch({type:CLIENTE_CONSTANTES.LOG_OUT})
+        document.location.reload();
+    }
 }
