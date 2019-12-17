@@ -1,4 +1,3 @@
-Projeto Desafio Mirante/Cooperforte.
 
 Implementando um front-end do zero  com uma stack elegante, desculpe, o layout ainda não é profissional.
 
