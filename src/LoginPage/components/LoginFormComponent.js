@@ -24,7 +24,7 @@ let LoginFormComponent = props => {
         <div className="wrapper fadeInDown">
             <div id="formContent">
                 <div id="formFooter">
-                    <span className="underlineHover" >Mirante/Cooperforte</span>
+                    <span className="underlineHover" >Surittec/Cooperforte</span>
                 </div>
 
                 <form onSubmit={handleSubmit}>
